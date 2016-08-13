@@ -1,0 +1,63 @@
+The problem of the "animal quiz" developed in F#, and with NUnit test framework.
+
+Example of execution:
+
+>think about an animal
+
+>is it a elephant?
+
+>please answer only yes or no. is it a elephant?
+no
+>what animal was?
+cat
+>please, write a yes/no question to distinguish a cat from a elephant
+is it big?
+>what is the answer to the question "is it big?" to distinguish a cat from a elephant?
+no
+>ok
+
+>think about an animal
+
+>is it big?
+no
+>is it a cat?
+no
+>what animal was?
+ant
+>please, write a yes/no question to distinguish a ant from a cat
+is it an insect?
+>what is the answer to the question "is it an insect?" to distinguish a ant from a cat?
+yes
+>ok
+
+>think about an animal
+
+>is it big?
+no
+>is it a cat?
+No
+>is it a ant?
+....
+
+--- 
+implementation details:
+It uses NUnit and Rhino mock
+RhinoMock is used to simulate command line input and output in tests (file InteractionTests.fs).
+Starting state can be set explicitly to interaction test and to unit tests.
+
+Some tests are long, showing a complex interaction.
+
+using mono:
+xbuild on the directory where there is the solution file fsharpAnimalQuizKata.sln
+
+if you use xamarin you should be able to open the project from it.
+If you use vim, you can edit the tests.vim and load it (by ":source") to have some command to:
+comment part of code
+build
+run tests
+
+I usually use both vim with differnet windows opened, and xamarin as well.
+
+
+
+
