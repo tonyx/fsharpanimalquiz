@@ -6,6 +6,10 @@ type KnowledgeTree = AnimalName of string | SubTree of Tree
 and Tree = {Question: string; yesBranch: KnowledgeTree; noBranch: KnowledgeTree}
 type state = | Welcome | InviteToThinkAboutAnAnimal |  GuessingFromCurrentNode |AskWhatAnimalWas | ExpectingDiscriminatingQuestion | AnsweringDiscriminatingQuestion
 
+let rec printTree tree = 
+    match tree with
+        | AnimalName name -> name
+        | SubTree {Question=question; yesBranch=yBranch; noBranch=nBranch } ->  "[ Question = " + question  + "; YesBranch = " + printTree yBranch +  "; NoBranch = "+printTree nBranch + "]"
 
 type playingStructure = {       conversationToken: string option;
                                 messageFromEngine: string; 

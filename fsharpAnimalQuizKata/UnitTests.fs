@@ -491,6 +491,135 @@ module unitTests =
 
 
 
+[<Test>]
+    let ``deep descending the tree (reproducing bug)``() =
+        let tree = AnimalName "elephant"
+        
+        //SubTree {Question="is it small?"; yesBranch = AnimalName "cat"; noBranch = AnimalName "elephant"}
+        let playStart = {(defaultInitState tree)  with currentState = Welcome} 
 
+        let mutable result = consoleInteract playStart 
+
+        Assert.AreEqual("think about an animal",result.messageFromEngine)
+        Assert.AreEqual(InviteToThinkAboutAnAnimal,result.currentState)
+
+        result <- consoleInteract result
+        Assert.AreEqual(GuessingFromCurrentNode,result.currentState)
+        Assert.AreEqual("is it a elephant?",result.messageFromEngine)
+
+        result <- consoleInteract { result with messageFromPlayer = Some "no" }
+
+        Assert.AreEqual(AskWhatAnimalWas,result.currentState)
+        Assert.AreEqual("what animal was?",result.messageFromEngine)
+
+        result <- consoleInteract { result with messageFromPlayer = Some "cat" }
+
+        Assert.AreEqual("please, write a yes/no question to distinguish a cat from a elephant",result.messageFromEngine)
+
+
+        //result <- consoleInteract result
+        result <- consoleInteract {result with messageFromPlayer = Some "is it small?"}
+
+        Assert.AreEqual(AnsweringDiscriminatingQuestion,result.currentState)    
+
+        Assert.AreEqual("what is the answer to the question \"is it small?\" to distinguish a cat from a elephant?",result.messageFromEngine)
+
+        //Assert.AreEqual([],result.yesNoList)
+        Assert.AreEqual(AnsweringDiscriminatingQuestion,result.currentState)    
+
+        result <- consoleInteract { result with messageFromPlayer = Some "yes"}
+
+        let expectedResultTree = SubTree {Question="is it small?"; yesBranch = AnimalName "cat"; noBranch = AnimalName "elephant"}
+
+        Assert.AreEqual(expectedResultTree,result.rootTree)
+
+        Assert.AreEqual(Welcome,result.currentState)
+
+        result <- consoleInteract result 
+
+        Assert.AreEqual("think about an animal",result.messageFromEngine)
+        Assert.AreEqual(InviteToThinkAboutAnAnimal,result.currentState)
+
+        result <- consoleInteract result
+        Assert.AreEqual(GuessingFromCurrentNode,result.currentState)
+        Assert.AreEqual("is it small?",result.messageFromEngine)
+
+        result <- consoleInteract { result with messageFromPlayer = Some "yes"}
+
+        //result <- consoleInteract result
+        Assert.AreEqual(GuessingFromCurrentNode,result.currentState)
+        Assert.AreEqual("is it a cat?",result.messageFromEngine)
+
+        result <- consoleInteract { result with messageFromPlayer = Some "no"}
+
+        Assert.AreEqual(AskWhatAnimalWas,result.currentState)
+        Assert.AreEqual("what animal was?",result.messageFromEngine)
+
+        result <- consoleInteract { result with messageFromPlayer = Some "mouse"}
+
+        Assert.AreEqual("please, write a yes/no question to distinguish a mouse from a cat",result.messageFromEngine)
+
+        result <- consoleInteract {result with messageFromPlayer = Some "is it clean?"}
+
+        Assert.AreEqual(AnsweringDiscriminatingQuestion,result.currentState)    
+
+        Assert.AreEqual("what is the answer to the question \"is it clean?\" to distinguish a mouse from a cat?",result.messageFromEngine)
+
+        Assert.AreEqual(AnsweringDiscriminatingQuestion,result.currentState)    
+
+        result <- consoleInteract { result with messageFromPlayer = Some "no"}
+
+        let expectedResultTree = SubTree {Question="is it small?"; yesBranch =  SubTree {Question="is it clean?"; yesBranch= AnimalName "cat";noBranch = AnimalName "mouse"}; noBranch = AnimalName "elephant"}
+
+        Assert.AreEqual(expectedResultTree,result.rootTree)
+
+        Assert.AreEqual(Welcome,result.currentState)
+
+        result <- consoleInteract result 
+
+        Assert.AreEqual("think about an animal",result.messageFromEngine)
+        Assert.AreEqual(InviteToThinkAboutAnAnimal,result.currentState)
+
+        result <- consoleInteract result
+        Assert.AreEqual(GuessingFromCurrentNode,result.currentState)
+        Assert.AreEqual("is it small?",result.messageFromEngine)
+
+        result <- consoleInteract { result with messageFromPlayer = Some "yes"}
+
+        Assert.AreEqual(GuessingFromCurrentNode,result.currentState)
+        Assert.AreEqual("is it clean?",result.messageFromEngine)
+
+        result <- consoleInteract { result with messageFromPlayer = Some "yes"}
+
+        Assert.AreEqual(GuessingFromCurrentNode,result.currentState)
+        Assert.AreEqual("is it a cat?",result.messageFromEngine)
+
+        result <- consoleInteract { result with messageFromPlayer = Some "no"}
+
+        Assert.AreEqual(AskWhatAnimalWas,result.currentState)
+        Assert.AreEqual("what animal was?",result.messageFromEngine)
+
+        result <- consoleInteract { result with messageFromPlayer = Some "ant"}
+
+        Assert.AreEqual("please, write a yes/no question to distinguish a ant from a cat",result.messageFromEngine)
+
+        result <- consoleInteract { result with messageFromPlayer = Some "is it an insect?"}
+
+        Assert.AreEqual(AnsweringDiscriminatingQuestion,result.currentState)    
+
+        Assert.AreEqual("what is the answer to the question \"is it an insect?\" to distinguish a ant from a cat?",result.messageFromEngine)
+
+        result <- consoleInteract { result with messageFromPlayer = Some "yes"}
+
+        let expectedResultTree = SubTree { Question="is it small?"; yesBranch =  
+           SubTree {Question="is it clean?"; yesBranch= SubTree {Question="is it an insect?";yesBranch= AnimalName "ant";noBranch= AnimalName "cat"};
+           noBranch= AnimalName "mouse"};noBranch= AnimalName "elephant"}
+
+        Assert.AreEqual(expectedResultTree,result.rootTree)
+
+        printf "%s\n" ("actual: " + (printTree result.rootTree) )
+
+        printf "%s\n" ("expected: " + (printTree expectedResultTree) )
+        Assert.IsTrue(true)
 
 
