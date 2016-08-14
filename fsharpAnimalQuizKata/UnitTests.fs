@@ -614,7 +614,6 @@ module unitTests =
 
         result <- consoleInteract { result with messageFromPlayer = Some "yes"}
 
-
         let expectedResultTree = SubTree { Question="is it small?"; yesBranch =  
            SubTree {Question="is it clean?"; yesBranch= SubTree {Question="is it an insect?";yesBranch= AnimalName "ant";noBranch= AnimalName "cat"};
            noBranch= AnimalName "mouse"};noBranch= AnimalName "elephant"}
