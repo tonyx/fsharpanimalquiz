@@ -531,6 +531,9 @@ module unitTests =
 
         let expectedResultTree = SubTree {Question="is it small?"; yesBranch = AnimalName "cat"; noBranch = AnimalName "elephant"}
 
+        // check this one:
+        //Assert.AreEqual(["yes"],result.yesNoList)
+
         Assert.AreEqual(expectedResultTree,result.rootTree)
 
         Assert.AreEqual(Welcome,result.currentState)
@@ -610,6 +613,7 @@ module unitTests =
         Assert.AreEqual("what is the answer to the question \"is it an insect?\" to distinguish a ant from a cat?",result.messageFromEngine)
 
         result <- consoleInteract { result with messageFromPlayer = Some "yes"}
+
 
         let expectedResultTree = SubTree { Question="is it small?"; yesBranch =  
            SubTree {Question="is it clean?"; yesBranch= SubTree {Question="is it an insect?";yesBranch= AnimalName "ant";noBranch= AnimalName "cat"};

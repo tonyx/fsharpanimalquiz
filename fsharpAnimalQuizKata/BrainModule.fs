@@ -38,17 +38,16 @@ let rec learn playStructure =
                                     yesBranch = AnimalName currentAnimal;
                                     noBranch = AnimalName playStructure.animalToBeLearned }
 
-
           | _ -> failwith "called learn when user interaction is different from yes or no"
 
      | "yes"::T -> SubTree {Question = question playStructure.rootTree; 
-                            yesBranch = learn (substituteYesNoList playStructure T);     
+                            yesBranch = learn (substituteYesNoList  {playStructure with rootTree = yesBranch playStructure.rootTree} T);     
                             noBranch= noBranch playStructure.rootTree
                            }
      | "no"::T -> SubTree {Question = question playStructure.rootTree;
                            yesBranch = yesBranch playStructure.rootTree;
-                           noBranch = learn  (substituteYesNoList playStructure T)
-                           }
+                           noBranch = learn  (substituteYesNoList {playStructure with rootTree = noBranch playStructure.rootTree} T)
+                          }
                                                                                                                                    
 let consoleInteract playStructure =
     let currentAnimal = match playStructure.currentNode with | AnimalName name -> name | _ -> "ERROR: expected  leaf node actual non leaf node!"

@@ -220,15 +220,15 @@ module tests =
 
 
 
-    [<Ignore>]
+
+    //[<Ignore>]
     [<Test>]
     let ``update the knowledge tree starting from elephant (reproducing bug)``() =
         // setup
         let mockrepo = new MockRepository()
         let inStream = mockrepo.StrictMock<InStream>()
         let outStream = mockrepo.StrictMock<OutStream>()
-      
-        
+
         // mocking
         Expect.Call(outStream.Write("think about an animal")) |> ignore
         Expect.Call(inStream.Input()).Return("") |> ignore
