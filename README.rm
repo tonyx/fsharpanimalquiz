@@ -1,3 +1,8 @@
+
+Note: a version of this code that uses gtk# gui is available here:
+https://github.com/tonyx/fsharpanimalquizgtk
+
+
 The problem of the "animal quiz" developed in F#, and with NUnit test framework.
 
 Example of execution:
